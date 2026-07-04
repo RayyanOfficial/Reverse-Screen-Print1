@@ -1494,10 +1494,66 @@ select.form-control {
   flex-shrink: 0;
 }
 
+/* Service content column: desktop — normal block flow */
+.service-content-col {
+  display: contents; /* passthrough on desktop so grid children behave normally */
+}
+
+.service-content-header,
+.service-content-body {
+  /* no special desktop styles needed — children render in source order inside the grid column */
+}
+
 @media (max-width: 992px) {
   .service-grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 0; /* gaps handled by inner spacing */
+  }
+
+  /* On mobile/tablet, switch the grid to a flex column so we can use order */
+  .service-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Reset passthrough so children become real flex items */
+  .service-content-col {
+    display: flex;
+    flex-direction: column;
+    order: 0; /* keeps header+body together as a unit wrapped in the col */
+    gap: 0;
+  }
+
+  /* 1st: heading (badge + h2) */
+  .service-content-header {
+    order: 1;
+    margin-bottom: 24px;
+  }
+
+  /* 2nd: image card */
+  .service-mock-graphic {
+    order: 2;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto 28px auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  /* 3rd: remaining text, list, price, buttons */
+  .service-content-body {
+    order: 3;
+  }
+
+  /* Make the whole grid a flex col so service-content-col items and mock-graphic interleave */
+  .service-grid {
+    align-items: stretch;
+  }
+
+  /* Override — service-content-col should NOT be a flex container that wraps both
+     header and body together; instead we pull it apart so order on the individual
+     children (header, body) positions them around the image. */
+  .service-content-col {
+    display: contents;
   }
 }
 
@@ -2867,7 +2923,9 @@ p  { font-size: clamp(0.92rem, 1.4vw, 1.05rem); }
   h2 { margin-bottom: 1rem; }
   .section-heading { margin-bottom: 20px; }
   .service-header { padding: 36px 0 24px; }
-  .service-grid { grid-template-columns: 1fr; gap: 28px; }
+  .service-grid { gap: 0; }
+  .service-mock-graphic { max-width: 480px; margin-left: auto; margin-right: auto; margin-bottom: 24px; }
+  .service-content-header { margin-bottom: 20px; }
 
   .lightbox-container {
     width: 100%;
@@ -2971,7 +3029,9 @@ p  { font-size: clamp(0.92rem, 1.4vw, 1.05rem); }
   .timeline-content { padding: 18px; }
 
   .service-header { padding: 28px 0 20px; }
-  .service-grid { gap: 20px; }
+  .service-grid { gap: 0; }
+  .service-mock-graphic { max-width: 380px; margin-bottom: 20px; }
+  .service-content-header { margin-bottom: 16px; }
   .section-header { margin-bottom: 20px; }
   .section-heading { margin-bottom: 16px; }
 
