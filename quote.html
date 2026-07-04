@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculate custom apparel printing costs in real-time. Select t-shirts, hoodies, caps, placement locations, and upload artwork for a custom quote.">
+  <title>Quote Builder | Reverse Screen Print</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo-link" aria-label="Reverse Screen Print Logo">
+        <img src="assets/Main-LOGO.png" alt="Reverse Screen Print logo" class="site-logo">
+      </a>
+
+      <button class="menu-toggle" aria-label="Toggle Navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="nav-menu-wrapper">
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+          <li class="nav-item dropdown">
+            <a href="services.html" class="nav-link">Services</a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-item"><a href="screen-printing.html" class="dropdown-link">Screen Printing</a></li>
+              <li class="dropdown-item"><a href="embroidery.html" class="dropdown-link">Embroidery</a></li>
+              <li class="dropdown-item"><a href="dtf-printing.html" class="dropdown-link">DTF Printing</a></li>
+              <li class="dropdown-item"><a href="custom-apparel.html" class="dropdown-link">Custom Apparel</a></li>
+              <li class="dropdown-item"><a href="banners.html" class="dropdown-link">Banners & Signage</a></li>
+              <li class="dropdown-item"><a href="business-cards.html" class="dropdown-link">Business Cards</a></li>
+              <li class="dropdown-item"><a href="decals.html" class="dropdown-link">Decals & Stickers</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="portfolio.html" class="nav-link">Portfolio</a></li>
+          <li class="nav-item"><a href="faq.html" class="nav-link">FAQ</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+          <li class="nav-item nav-cta-wrapper"><a href="quote.html" class="nav-cta">Quick Quote</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Page Header banner -->
+    <section class="service-header">
+      <div class="container" style="padding: 20px 0;">
+        <span class="feature-badge badge-yellow">Order Estimator</span>
+        <h1 class="text-gradient-magenta-yellow">Build Your Quote</h1>
+        <p style="max-width: 600px; margin-top: 15px;">
+          Configure your product quantities, placement coordinates, and artwork variables below for a live pricing estimation.
+        </p>
+      </div>
+    </section>
+
+    <!-- Interactive Estimate Dashboard -->
+    <section class="container">
+      <form id="quote-form">
+        <div class="quote-dashboard">
+          
+          <!-- Left Column: Specs Configuration -->
+          <div class="card cyan-hover" style="padding: 40px; border-color: rgba(0, 191, 255, 0.15);">
+            <h3 style="margin-bottom: 25px; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px;">Order Configuration</h3>
+            
+            <div class="form-row">
+              <!-- Select Product Substrate -->
+              <div class="form-group cyan-focus">
+                <label for="calc-product" class="form-label">Product Type</label>
+                <select id="calc-product" class="form-control" required>
+                  <option value="t-shirt" selected>Premium T-Shirt</option>
+                  <option value="hoodie">Heavyweight Hoodie</option>
+                  <option value="cap">Structured Snapback Cap</option>
+                  <option value="banner">Heavy Vinyl Banner (Outdoor)</option>
+                  <option value="card">Premium Business Cards</option>
+                  <option value="sticker">Custom Cut Stickers</option>
+                </select>
+              </div>
+
+              <!-- Input quantity -->
+              <div class="form-group cyan-focus">
+                <label for="calc-qty" class="form-label">Order Quantity</label>
+                <input type="number" id="calc-qty" class="form-control" value="50" min="1" step="1" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <!-- Colors Select (Screen Printing Specific) -->
+              <div class="form-group cyan-focus">
+                <label for="calc-colors" class="form-label">Colors in Design</label>
+                <select id="calc-colors" class="form-control">
+                  <option value="1" selected>1 Spot Color</option>
+                  <option value="2">2 Spot Colors</option>
+                  <option value="3">3 Spot Colors</option>
+                  <option value="4">4 Spot Colors</option>
+                  <option value="5">5 Spot Colors</option>
+                  <option value="6">Full Color / Gradients (DTF)</option>
+                </select>
+              </div>
+
+              <!-- Artwork mock requirements note -->
+              <div style="display:flex; align-items:center; margin-bottom: 25px; font-size: 0.85rem; color: var(--text-muted);">
+                💡 Tip: Screen setups cost $20.00 per design color. Gradients are best printed with DTF transfers.
+              </div>
+            </div>
+
+            <!-- Print Placement checkbox selectors -->
+            <div class="form-group">
+              <label class="form-label">Decoration Placements</label>
+              <div class="placement-grid">
+                
+                <!-- Front -->
+                <div class="placement-card selected">
+                  <input type="checkbox" value="front" checked>
+                  <svg class="placement-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2v20M20 5v14M4 5v14"/></svg>
+                  <div class="placement-card-title">Front</div>
+                </div>
+
+                <!-- Back -->
+                <div class="placement-card">
+                  <input type="checkbox" value="back">
+                  <svg class="placement-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 15l4-4 4 4 4-4 4 4"/></svg>
+                  <div class="placement-card-title">Back</div>
+                </div>
+
+                <!-- Left Chest -->
+                <div class="placement-card">
+                  <input type="checkbox" value="left-chest">
+                  <svg class="placement-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="8" cy="10" r="2"/></svg>
+                  <div class="placement-card-title">Left Chest</div>
+                </div>
+
+                <!-- Sleeve -->
+                <div class="placement-card">
+                  <input type="checkbox" value="sleeve">
+                  <svg class="placement-card-icon" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 8l16 8M4 16l16-8"/></svg>
+                  <div class="placement-card-title">Sleeve</div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Artwork drag & drop files upload -->
+            <div class="form-group">
+              <label class="form-label">Upload Design Artwork</label>
+              <div id="file-dropzone" class="file-dropzone">
+                <div class="file-dropzone-icon">📁</div>
+                <p>Drag &amp; drop design mock files here, or <span style="color:var(--primary); font-weight:700">browse local files</span></p>
+                <p style="font-size:0.75rem; color:var(--text-dark); margin-top:5px;">Supported formats: AI, EPS, SVG, PDF, PNG (Min 300dpi)</p>
+                <input type="file" id="calc-file" accept=".ai,.eps,.svg,.pdf,.png">
+              </div>
+            </div>
+
+            <!-- Contact data fields -->
+            <h3 style="margin-top: 40px; margin-bottom: 20px; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px;">Contact Details</h3>
+            
+            <div class="form-group cyan-focus">
+              <label for="calc-name" class="form-label">Full Name</label>
+              <input type="text" id="calc-name" class="form-control" placeholder="John Doe" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group cyan-focus">
+                <label for="calc-email" class="form-label">Email Address</label>
+                <input type="email" id="calc-email" class="form-control" placeholder="john@example.com" required>
+              </div>
+
+              <div class="form-group cyan-focus">
+                <label for="calc-phone" class="form-label">Phone Number</label>
+                <input type="tel" id="calc-phone" class="form-control" placeholder="(555) 555-5555" required>
+              </div>
+            </div>
+
+            <div class="form-group cyan-focus">
+              <label for="calc-notes" class="form-label">Special Finish Notes / Instructions</label>
+              <textarea id="calc-notes" class="form-control" rows="3" placeholder="Tell us about fabric preferences, sizing breakdown (e.g. 10M, 20L), or custom ink requirements..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-magenta" style="width: 100%; margin-top: 20px;">Submit Order Details</button>
+          </div>
+
+          <!-- Right Column: Live Price Breakdown card -->
+          <div class="card summary-card">
+            <img src="assets/Custom-Apperal-img.jpg" alt="Custom apparel quote example" class="contact-asset-image" style="margin-bottom: 18px; height: 180px;">
+            <h3 class="summary-title neon-magenta">Estimate Summary</h3>
+            
+            <div class="summary-line">
+              <span style="color:var(--text-muted)">Selected Product:</span>
+              <span id="summary-product-val" style="font-weight:700">T-Shirt</span>
+            </div>
+
+            <div class="summary-line">
+              <span style="color:var(--text-muted)">Order Volume:</span>
+              <span id="summary-qty-val" style="font-weight:700">50</span>
+            </div>
+
+            <div class="summary-line">
+              <span style="color:var(--text-muted)">Placements chosen:</span>
+              <span id="summary-placements" style="font-weight:700; font-size:0.85rem; max-width:180px; text-align:right;">FRONT</span>
+            </div>
+
+            <div class="summary-line" style="border-top:1px solid #111; padding-top:15px; margin-top:15px;">
+              <span style="color:var(--text-muted)">Est. Price Per Unit:</span>
+              <span id="summary-unit-price" class="neon-cyan" style="font-weight:700">$9.50</span>
+            </div>
+
+            <div class="summary-line">
+              <span style="color:var(--text-muted)">Screen Setup Fee:</span>
+              <span id="summary-setup-fee" style="font-weight:700">$20.00</span>
+            </div>
+
+            <div class="summary-line summary-line-total">
+              <span>Estimated Total:</span>
+              <span id="summary-total-price" class="neon-yellow">$495.00</span>
+            </div>
+
+            <div class="summary-info-note">
+              <p style="font-size:0.8rem; color:var(--text-dark); line-height:1.4;">
+                * This estimate is a ballpark layout calculator. Screen setups, bulk breaks, and print difficulty will be finalized by our artists upon vector mockup delivery.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </section>
+  </main>
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-grid container" style="padding: 0 0 48px 0;">
+
+      <!-- Col 1: Logo & Tagline -->
+      <div class="footer-info">
+        <a href="index.html" class="footer-logo" aria-label="Reverse Screen Print Home" style="display:inline-block;margin-bottom:20px;">
+          <img src="assets/Main-LOGO.png" alt="Reverse Screen Print logo" class="footer-logo-image">
+        </a>
+        <p>Premium custom apparel, high-opacity screen prints, technical embroidery, and heavy-duty graphics printed in-house in Phoenix, AZ.</p>
+      </div>
+
+      <!-- Col 2: Navigation -->
+      <div>
+        <h4 class="footer-title">Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Printing Services</a></li>
+          <li><a href="portfolio.html">Our Work</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Get in Touch</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Services -->
+      <div>
+        <h4 class="footer-title">Services</h4>
+        <ul class="footer-links">
+          <li><a href="screen-printing.html">Screen Printing</a></li>
+          <li><a href="embroidery.html">Embroidery</a></li>
+          <li><a href="dtf-printing.html">DTF Transfers</a></li>
+          <li><a href="custom-apparel.html">Custom Apparel</a></li>
+          <li><a href="banners.html">Banners &amp; Signage</a></li>
+          <li><a href="business-cards.html">Business Cards</a></li>
+          <li><a href="decals.html">Stickers &amp; Decals</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Contact -->
+      <div>
+        <h4 class="footer-title">Contact</h4>
+        <ul class="footer-contact-list">
+          <li class="footer-contact-item">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.36 12 19.79 19.79 0 0 1 1.21 3.4 2 2 0 0 1 3.18 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/></svg>
+            <a href="tel:+16026538297" aria-label="Call us">602-653-8297</a>
+          </li>
+          <li class="footer-contact-item">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:reversescreenprint@gmail.com" aria-label="Email us">reversescreenprint@gmail.com</a>
+          </li>
+          <li class="footer-contact-item">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Phoenix, AZ</span>
+          </li>
+        </ul>
+        <div class="footer-social-stack">
+          <a href="https://www.instagram.com/reverse_screenprint/" target="_blank" rel="noopener noreferrer" class="footer-social-pill" aria-label="Follow us on Instagram">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            Instagram
+          </a>
+          <a href="https://www.facebook.com/reverse.screenprint/" target="_blank" rel="noopener noreferrer" class="footer-social-pill" aria-label="Follow us on Facebook">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            Facebook
+          </a>
+          <a href="mailto:reversescreenprint@gmail.com" class="footer-social-pill" aria-label="Email us">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email Us
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 5: Newsletter -->
+      <div>
+        <h4 class="footer-title">Stay Updated</h4>
+        <p class="footer-newsletter-text">Join our list for print design tips, custom templates, and seasonal bulk discounts.</p>
+        <form class="newsletter-form">
+          <input type="email" class="newsletter-input" placeholder="Your Email Address" aria-label="Newsletter email" required>
+          <button type="submit" class="newsletter-btn" aria-label="Subscribe button">Join</button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Footer Bottom Bar -->
+    <div class="container" style="padding: 0;">
+      <div class="footer-bottom">
+        <div>&copy; 2026 Reverse Screen Print. All rights reserved.</div>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/reverse_screenprint/" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Follow us on Instagram">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="https://www.facebook.com/reverse.screenprint/" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Follow us on Facebook">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="mailto:reversescreenprint@gmail.com" class="footer-social-link" aria-label="Email us">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <button id="scroll-top-btn" class="scroll-top-btn" aria-label="Scroll to top">↑</button>
+</body>
+</html>
