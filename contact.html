@@ -62,11 +62,20 @@
 
     <!-- Contact Grid -->
     <section class="container">
-      <div class="grid-2">
-        <!-- Col 1: Details List -->
-        <div>
+      <div class="grid-2 contact-details-grid">
+        <!-- Col 1 top: badge + heading -->
+        <div class="contact-copy-top">
           <span class="feature-badge badge-cyan">Connect</span>
           <h2 style="margin-bottom: 25px;">Print Shop Details</h2>
+        </div>
+
+        <!-- Mobile-only image: shown between heading and body copy on mobile -->
+        <div class="contact-img-mobile">
+          <img src="assets/Banner.jpg" alt="Reverse Screen Print business banner" class="contact-asset-image">
+        </div>
+
+        <!-- Col 1 bottom: description + contact cards -->
+        <div class="contact-copy-bottom">
           <p style="margin-bottom: 30px;">
             We operate out of our industrial print warehouse. If you'd like to check blank apparel weights or inspect color samples, please call to arrange a consultation.
           </p>
@@ -118,9 +127,9 @@
           </div>
         </div>
 
-        <!-- Col 2: Contact Form -->
-        <div class="card magenta-hover" style="border-color: rgba(255, 0, 170, 0.15);">
-          <img src="assets/Banner.jpg" alt="Reverse Screen Print business banner" class="contact-asset-image" style="margin-bottom: 20px; height: 220px;">
+        <!-- Col 2: Contact Form (image shown here on desktop only) -->
+        <div class="contact-form-col card magenta-hover" style="border-color: rgba(255, 0, 170, 0.15);">
+          <img src="assets/Banner.jpg" alt="Reverse Screen Print business banner" class="contact-asset-image contact-img-desktop">
           <span class="feature-badge badge-magenta" style="float: right;">Response within 24h</span>
           <h3 style="margin-bottom: 20px;">Send a Message</h3>
           
