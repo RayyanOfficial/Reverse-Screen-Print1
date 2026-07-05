@@ -405,6 +405,7 @@ header.scrolled {
   justify-content: space-between;
   gap: 20px;
   padding: 0;
+  overflow: visible;
 }
 
 .logo-link {
@@ -499,6 +500,8 @@ header.scrolled {
   visibility: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(0, 191, 255, 0.05);
   transition: all var(--transition-medium);
+  z-index: 10000;
+  overflow: visible;
 }
 
 .dropdown-menu::before {
@@ -2739,9 +2742,15 @@ img, video, svg, iframe {
 }
 
 /* Prevent any element from causing horizontal scroll */
-section, main, footer, header {
+section, main, footer {
   max-width: 100vw;
   overflow-x: hidden;
+}
+
+/* Header must never clip its dropdown — overflow must remain visible */
+header {
+  max-width: 100vw;
+  overflow: visible;
 }
 
 /* ── Typography fluid scaling ──────────────────── */
