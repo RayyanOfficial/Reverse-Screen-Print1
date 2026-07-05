@@ -3168,54 +3168,70 @@ p  { font-size: clamp(0.92rem, 1.4vw, 1.05rem); }
   will-change: opacity, transform;
   transition-property: opacity, transform;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  transition-duration: 0.75s;
+  transition-duration: 0.7s;
 }
 
 /* Direction variants */
-[data-reveal="fade-up"] {
-  transform: translateY(40px);
-}
-
-[data-reveal="fade-down"] {
-  transform: translateY(-40px);
-}
-
-[data-reveal="fade-left"] {
-  transform: translateX(-50px);
-}
-
-[data-reveal="fade-right"] {
-  transform: translateX(50px);
-}
-
-[data-reveal="fade-scale"] {
-  transform: scale(0.92);
-}
-
-[data-reveal="fade-scale-up"] {
-  transform: scale(0.92) translateY(24px);
-}
+[data-reveal="fade-up"]       { transform: translateY(36px); }
+[data-reveal="fade-down"]     { transform: translateY(-28px); }
+[data-reveal="fade-left"]     { transform: translateX(-44px); }
+[data-reveal="fade-right"]    { transform: translateX(44px); }
+[data-reveal="fade-scale"]    { transform: scale(0.93); }
+[data-reveal="fade-scale-up"] { transform: scale(0.93) translateY(20px); }
 
 /* Revealed / visible state */
 [data-reveal].revealed {
   opacity: 1;
   transform: none;
+  /* Keep delay ONLY during the reveal transition; reset after so hover etc. aren't affected */
+  transition-delay: 0ms !important; /* overridden by data-delay below until revealed */
 }
 
-/* Stagger delay utilities */
-[data-delay="100"] { transition-delay: 100ms; }
-[data-delay="150"] { transition-delay: 150ms; }
-[data-delay="200"] { transition-delay: 200ms; }
-[data-delay="250"] { transition-delay: 250ms; }
-[data-delay="300"] { transition-delay: 300ms; }
-[data-delay="350"] { transition-delay: 350ms; }
-[data-delay="400"] { transition-delay: 400ms; }
-[data-delay="500"] { transition-delay: 500ms; }
-[data-delay="600"] { transition-delay: 600ms; }
+/* Stagger delay utilities — these apply while element is NOT yet revealed */
+:not(.revealed)[data-delay="0"]   { transition-delay: 0ms; }
+:not(.revealed)[data-delay="60"]  { transition-delay: 60ms; }
+:not(.revealed)[data-delay="80"]  { transition-delay: 80ms; }
+:not(.revealed)[data-delay="100"] { transition-delay: 100ms; }
+:not(.revealed)[data-delay="120"] { transition-delay: 120ms; }
+:not(.revealed)[data-delay="150"] { transition-delay: 150ms; }
+:not(.revealed)[data-delay="160"] { transition-delay: 160ms; }
+:not(.revealed)[data-delay="200"] { transition-delay: 200ms; }
+:not(.revealed)[data-delay="240"] { transition-delay: 240ms; }
+:not(.revealed)[data-delay="250"] { transition-delay: 250ms; }
+:not(.revealed)[data-delay="280"] { transition-delay: 280ms; }
+:not(.revealed)[data-delay="300"] { transition-delay: 300ms; }
+:not(.revealed)[data-delay="340"] { transition-delay: 340ms; }
+:not(.revealed)[data-delay="350"] { transition-delay: 350ms; }
+:not(.revealed)[data-delay="400"] { transition-delay: 400ms; }
+:not(.revealed)[data-delay="500"] { transition-delay: 500ms; }
+:not(.revealed)[data-delay="600"] { transition-delay: 600ms; }
 
-/* Longer, slower variant for large visual elements */
-[data-reveal][data-slow] {
-  transition-duration: 1s;
+/* Longer transition for large visual elements */
+[data-reveal][data-slow] { transition-duration: 1s; }
+
+/* Reduce motion on smaller screens to avoid layout shifts */
+@media (max-width: 768px) {
+  [data-reveal="fade-left"]     { transform: translateX(-24px); }
+  [data-reveal="fade-right"]    { transform: translateX(24px); }
+  [data-reveal="fade-up"]       { transform: translateY(24px); }
+  [data-reveal="fade-down"]     { transform: translateY(-18px); }
+  [data-reveal="fade-scale"]    { transform: scale(0.96); }
+  [data-reveal="fade-scale-up"] { transform: scale(0.96) translateY(14px); }
+  [data-reveal] { transition-duration: 0.55s; }
+}
+
+@media (max-width: 480px) {
+  [data-reveal="fade-left"],
+  [data-reveal="fade-right"]    { transform: translateX(0) translateY(20px); }
+  /* Collapse horizontal slides to vertical on very small screens */
+  [data-reveal] { transition-duration: 0.5s; }
+  /* Cap stagger delays on mobile so content doesn't feel slow */
+  :not(.revealed)[data-delay="300"],
+  :not(.revealed)[data-delay="340"],
+  :not(.revealed)[data-delay="350"],
+  :not(.revealed)[data-delay="400"],
+  :not(.revealed)[data-delay="500"],
+  :not(.revealed)[data-delay="600"] { transition-delay: 200ms; }
 }
 
 /* Respect reduced motion preferences */

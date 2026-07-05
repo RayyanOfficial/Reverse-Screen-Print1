@@ -63,159 +63,237 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  // --- Scroll-Reveal Animation System ---
-  // Auto-assign data-reveal attributes to elements that don't already have them
+  // =============================================================
+  // SCROLL-REVEAL ANIMATION SYSTEM
+  // Assigns data-reveal + data-delay to every meaningful element
+  // then triggers via IntersectionObserver on viewport entry.
+  // =============================================================
+
+  /** Helper: set reveal attrs only if not already set */
+  const rv = (el, dir, delay, slow) => {
+    if (!el || el.hasAttribute('data-reveal')) return;
+    el.setAttribute('data-reveal', dir);
+    if (delay) el.setAttribute('data-delay', String(delay));
+    if (slow)  el.setAttribute('data-slow', '');
+  };
+
+  /** Helper: stagger a NodeList */
+  const rvList = (els, dirFn, delayFn, slow) => {
+    els.forEach((el, i) => {
+      if (el.hasAttribute('data-reveal')) return;
+      el.setAttribute('data-reveal', typeof dirFn === 'function' ? dirFn(i) : dirFn);
+      const d = typeof delayFn === 'function' ? delayFn(i) : delayFn;
+      if (d) el.setAttribute('data-delay', String(d));
+      if (slow) el.setAttribute('data-slow', '');
+    });
+  };
+
   const autoReveal = () => {
-    // Hero elements — animate in immediately on load with staggered delays
-    const heroCopyTop = document.querySelector('.hero-copy-top');
+
+    // ── HOME PAGE HERO ─────────────────────────────────────────
+    const heroCopyTop    = document.querySelector('.hero-copy-top');
     const heroCopyBottom = document.querySelector('.hero-copy-bottom');
+    const heroVisual     = document.querySelector('.hero-visual');
+
     if (heroCopyTop) {
-      const h1 = heroCopyTop.querySelector('h1');
-      if (h1) { h1.setAttribute('data-reveal', 'fade-up'); h1.setAttribute('data-delay', '100'); }
+      rv(heroCopyTop.querySelector('h1'), 'fade-up', 100);
     }
     if (heroCopyBottom) {
-      const subheading = heroCopyBottom.querySelector('.hero-subheading');
-      const desc       = heroCopyBottom.querySelector('.hero-description');
-      const btnGroup   = heroCopyBottom.querySelector('.btn-group');
-      const arrows     = heroCopyBottom.querySelector('.hero-arrows');
-      if (subheading) { subheading.setAttribute('data-reveal', 'fade-up'); subheading.setAttribute('data-delay', '200'); }
-      if (desc)       { desc.setAttribute('data-reveal', 'fade-up');       desc.setAttribute('data-delay', '300'); }
-      if (btnGroup)   { btnGroup.setAttribute('data-reveal', 'fade-up');   btnGroup.setAttribute('data-delay', '400'); }
-      if (arrows)     { arrows.setAttribute('data-reveal', 'fade-up');     arrows.setAttribute('data-delay', '500'); }
+      rv(heroCopyBottom.querySelector('.hero-subheading'), 'fade-up', 200);
+      rv(heroCopyBottom.querySelector('.hero-description'),  'fade-up', 300);
+      rv(heroCopyBottom.querySelector('.btn-group'),         'fade-up', 400);
+      rv(heroCopyBottom.querySelector('.hero-arrows'),       'fade-up', 500);
+    }
+    rv(heroVisual, 'fade-left', 250, true);
+
+    // ── PAGE HERO BANNER (all inner pages) ─────────────────────
+    const svcHeader = document.querySelector('.service-header');
+    if (svcHeader) {
+      rv(svcHeader.querySelector('.feature-badge'), 'fade-down', 100);
+      rv(svcHeader.querySelector('h1'),             'fade-up',   200);
+      rv(svcHeader.querySelector('p'),              'fade-up',   300);
+      rv(svcHeader.querySelector('.btn-group'),     'fade-up',   400);
     }
 
-    const heroVisual = document.querySelector('.hero-visual');
-    if (heroVisual) {
-      heroVisual.setAttribute('data-reveal', 'fade-left');
-      heroVisual.setAttribute('data-delay', '300');
-      heroVisual.setAttribute('data-slow', '');
-    }
-
-    // Page hero (service/about pages)
-    const serviceHeader = document.querySelector('.service-header');
-    if (serviceHeader) {
-      const badge = serviceHeader.querySelector('.feature-badge, .hero-badge');
-      const h1 = serviceHeader.querySelector('h1');
-      const p = serviceHeader.querySelector('p');
-      const btns = serviceHeader.querySelector('.btn-group');
-      const visual = serviceHeader.querySelector('.service-mock-graphic');
-      if (badge)  { badge.setAttribute('data-reveal', 'fade-down');  badge.setAttribute('data-delay', '100'); }
-      if (h1)     { h1.setAttribute('data-reveal', 'fade-up');        h1.setAttribute('data-delay', '200'); }
-      if (p)      { p.setAttribute('data-reveal', 'fade-up');         p.setAttribute('data-delay', '300'); }
-      if (btns)   { btns.setAttribute('data-reveal', 'fade-up');      btns.setAttribute('data-delay', '400'); }
-      if (visual) { visual.setAttribute('data-reveal', 'fade-left');  visual.setAttribute('data-delay', '300'); visual.setAttribute('data-slow', ''); }
-    }
-
-    // Section headings
+    // ── SECTION HEADINGS & HEADERS ─────────────────────────────
     document.querySelectorAll('.section-heading, .section-header').forEach(el => {
-      if (!el.hasAttribute('data-reveal')) {
-        el.setAttribute('data-reveal', 'fade-up');
-      }
+      if (el.hasAttribute('data-reveal')) return;
+      rv(el.querySelector('.feature-badge'), 'fade-down', 0);
+      rv(el.querySelector('h2'),             'fade-up',   80);
+      rv(el.querySelector('p'),              'fade-up',   160);
+      // Fallback: animate the container itself if no children matched
+      if (!el.querySelector('[data-reveal]')) rv(el, 'fade-up', 0);
     });
 
-    // Service cards — staggered left/right/up
-    document.querySelectorAll('.services-grid .card').forEach((card, i) => {
-      if (!card.hasAttribute('data-reveal')) {
-        const dirs = ['fade-up', 'fade-up', 'fade-up'];
-        card.setAttribute('data-reveal', dirs[i % 3]);
-        card.setAttribute('data-delay', String(100 + (i % 3) * 100));
-      }
+    // Standalone feature-badge elements outside section-headers
+    document.querySelectorAll('.feature-badge').forEach(el => rv(el, 'fade-down', 0));
+
+    // ── INDEX: SERVICES PREVIEW CARDS ──────────────────────────
+    rvList(
+      document.querySelectorAll('.services-grid .service-card'),
+      i => ['fade-up', 'fade-up', 'fade-up'][i % 3],
+      i => 80 + (i % 3) * 80
+    );
+
+    // ── INDEX: WHY CHOOSE US ────────────────────────────────────
+    rv(document.querySelector('.image-stack'), 'fade-scale', 0, true);
+    rvList(
+      document.querySelectorAll('.feature-grid .info-card'),
+      'fade-up',
+      i => 80 + i * 100
+    );
+
+    // ── INDEX: PORTFOLIO PREVIEW GRID ──────────────────────────
+    rvList(
+      document.querySelectorAll('.portfolio-preview-grid .portfolio-preview-card'),
+      i => (i % 2 === 0 ? 'fade-left' : 'fade-right'),
+      i => (i % 3) * 100
+    );
+
+    // ── INDEX: TESTIMONIALS ─────────────────────────────────────
+    rvList(
+      document.querySelectorAll('.testimonial-card'),
+      'fade-up',
+      i => 100 + i * 120
+    );
+
+    // ── SERVICE DETAIL PAGES: content grid ─────────────────────
+    document.querySelectorAll('.service-content-header').forEach(el => rv(el, 'fade-up', 0));
+    document.querySelectorAll('.service-mock-graphic').forEach(el => rv(el, 'fade-scale', 0, true));
+    document.querySelectorAll('.service-content-body > p').forEach((el, i) => rv(el, 'fade-up', 80 + i * 80));
+    document.querySelectorAll('.service-content-body .service-options-list').forEach(el => rv(el, 'fade-up', 200));
+    document.querySelectorAll('.service-content-body .price-tag').forEach(el => rv(el, 'fade-up', 280));
+    document.querySelectorAll('.service-content-body .btn-group').forEach(el => rv(el, 'fade-up', 340));
+
+    // Tech spec cards (grid-2 on service pages)
+    document.querySelectorAll('.service-grid ~ section .grid-2 .card, .container > .grid-2 .card').forEach((el, i) => {
+      rv(el, i % 2 === 0 ? 'fade-right' : 'fade-left', i * 120, false);
     });
 
-    // Feature / info cards
-    document.querySelectorAll('.feature-grid .info-card').forEach((card, i) => {
-      if (!card.hasAttribute('data-reveal')) {
-        card.setAttribute('data-reveal', 'fade-up');
-        card.setAttribute('data-delay', String(100 + i * 100));
-      }
+    // ── SERVICES PAGE: service listing cards ───────────────────
+    rvList(
+      document.querySelectorAll('.grid-3 .card'),
+      i => ['fade-up', 'fade-scale-up', 'fade-up'][i % 3],
+      i => (i % 3) * 100
+    );
+    rv(document.querySelector('.compare-container'), 'fade-up', 0);
+
+    // ── ABOUT PAGE ──────────────────────────────────────────────
+    // Story grid: copy top/bottom and visual
+    rv(document.querySelector('.about-copy-top'),    'fade-right', 0);
+    rv(document.querySelector('.about-copy-bottom'), 'fade-right', 100);
+    rv(document.querySelector('.about-visual-stack'), 'fade-left', 80, true);
+    rv(document.querySelector('.about-stats-block'), 'fade-up', 200);
+
+    // Stat numbers animate individually
+    rvList(
+      document.querySelectorAll('.stat-number'),
+      'fade-scale-up',
+      i => i * 150
+    );
+
+    // Timeline
+    rvList(
+      document.querySelectorAll('.timeline-item'),
+      i => (i % 2 === 0 ? 'fade-right' : 'fade-left'),
+      i => i * 80
+    );
+
+    // Equipment cards
+    rvList(
+      document.querySelectorAll('.equipment-card'),
+      'fade-scale-up',
+      i => i * 120
+    );
+
+    // ── PORTFOLIO PAGE ──────────────────────────────────────────
+    // Filter tabs
+    rvList(
+      document.querySelectorAll('.filter-btn'),
+      'fade-down',
+      i => i * 60
+    );
+
+    // Portfolio grid cards — staggered by row (3-col grid)
+    rvList(
+      document.querySelectorAll('.portfolio-grid .portfolio-item'),
+      'fade-scale-up',
+      i => (i % 3) * 100
+    );
+
+    // ── FAQ PAGE ────────────────────────────────────────────────
+    rv(document.querySelector('.faq-list .form-group'), 'fade-down', 0);
+    rvList(
+      document.querySelectorAll('.faq-item'),
+      'fade-up',
+      i => Math.min(i * 50, 300)   // cap stagger at 300ms so last items aren't delayed too long
+    );
+
+    // ── CONTACT PAGE ────────────────────────────────────────────
+    rv(document.querySelector('.contact-copy-top'),    'fade-right', 0);
+    rv(document.querySelector('.contact-copy-bottom'), 'fade-right', 80);
+    rv(document.querySelector('.contact-form-col'),    'fade-left',  80, true);
+    rv(document.querySelector('.contact-img-mobile'),  'fade-scale', 120, true);
+
+    // Contact info cards
+    rvList(
+      document.querySelectorAll('.contact-copy-bottom .card'),
+      'fade-right',
+      i => i * 80
+    );
+
+    // Map section
+    rv(document.querySelector('.map-canvas'), 'fade-scale', 0, true);
+
+    // ── QUOTE PAGE ──────────────────────────────────────────────
+    rv(document.querySelector('.quote-dashboard'),    'fade-up', 0);
+    rv(document.querySelector('#quote-form'),         'fade-right', 80);
+    rv(document.querySelector('.summary-card'),       'fade-left', 160, true);
+    rv(document.querySelector('.file-dropzone'),      'fade-up', 0);
+    rvList(
+      document.querySelectorAll('.placement-grid .placement-card'),
+      'fade-scale-up',
+      i => i * 60
+    );
+
+    // ── GENERIC: any remaining h2, h3 in content not yet tagged ─
+    document.querySelectorAll('main h2, main h3').forEach(el => rv(el, 'fade-up', 0));
+
+    // ── GENERIC: standalone p tags in content areas ─────────────
+    document.querySelectorAll('main .container > p, main section > p').forEach(el => rv(el, 'fade-up', 80));
+
+    // ── GENERIC: buttons not inside already-revealed parents ────
+    document.querySelectorAll('main .btn-group').forEach(el => rv(el, 'fade-up', 200));
+    document.querySelectorAll('main .neon-cta-box').forEach(el => rv(el, 'fade-up', 0));
+    document.querySelectorAll('main .neon-cta-box .btn').forEach((el, i) => rv(el, 'fade-up', 100 + i * 80));
+
+    // ── GENERIC: spec / tech cards anywhere ─────────────────────
+    document.querySelectorAll('.card:not([data-reveal])').forEach((el, i) => {
+      rv(el, 'fade-scale-up', (i % 4) * 80);
     });
 
-    // Portfolio preview cards
-    document.querySelectorAll('.portfolio-preview-grid .portfolio-preview-card').forEach((card, i) => {
-      if (!card.hasAttribute('data-reveal')) {
-        card.setAttribute('data-reveal', i % 2 === 0 ? 'fade-left' : 'fade-right');
-        card.setAttribute('data-delay', String(i * 120));
-      }
-    });
-
-    // Portfolio grid items
-    document.querySelectorAll('.portfolio-grid .portfolio-item').forEach((card, i) => {
-      if (!card.hasAttribute('data-reveal')) {
-        card.setAttribute('data-reveal', 'fade-scale-up');
-        card.setAttribute('data-delay', String((i % 3) * 100));
-      }
-    });
-
-    // Testimonial cards
-    document.querySelectorAll('.testimonial-grid .testimonial-card').forEach((card, i) => {
-      if (!card.hasAttribute('data-reveal')) {
-        card.setAttribute('data-reveal', 'fade-up');
-        card.setAttribute('data-delay', String(100 + i * 120));
-      }
-    });
-
-    // Image stack / section images
-    document.querySelectorAll('.image-stack, .service-mock-graphic, .about-media-card').forEach((el, i) => {
-      if (!el.hasAttribute('data-reveal')) {
-        el.setAttribute('data-reveal', 'fade-scale');
-        el.setAttribute('data-slow', '');
-      }
-    });
-
-    // CTA box
-    document.querySelectorAll('.neon-cta-box').forEach(el => {
-      if (!el.hasAttribute('data-reveal')) {
-        el.setAttribute('data-reveal', 'fade-up');
-      }
-    });
-
-    // Timeline items
-    document.querySelectorAll('.timeline-item').forEach((item, i) => {
-      if (!item.hasAttribute('data-reveal')) {
-        item.setAttribute('data-reveal', i % 2 === 0 ? 'fade-right' : 'fade-left');
-        item.setAttribute('data-delay', String(i * 100));
-      }
-    });
-
-    // FAQ items
-    document.querySelectorAll('.faq-item').forEach((item, i) => {
-      if (!item.hasAttribute('data-reveal')) {
-        item.setAttribute('data-reveal', 'fade-up');
-        item.setAttribute('data-delay', String(i * 60));
-      }
-    });
-
-    // Compare table
-    const compareContainer = document.querySelector('.compare-container');
-    if (compareContainer && !compareContainer.hasAttribute('data-reveal')) {
-      compareContainer.setAttribute('data-reveal', 'fade-up');
-    }
-
-    // Contact form, quote dashboard
-    document.querySelectorAll('.quote-dashboard, #contact-form, .contact-asset-image').forEach((el, i) => {
-      if (!el.hasAttribute('data-reveal')) {
-        el.setAttribute('data-reveal', i % 2 === 0 ? 'fade-right' : 'fade-left');
-      }
-    });
-
-    // Footer columns
-    document.querySelectorAll('.footer-grid > div').forEach((col, i) => {
-      if (!col.hasAttribute('data-reveal')) {
-        col.setAttribute('data-reveal', 'fade-up');
-        col.setAttribute('data-delay', String(i * 100));
-      }
-    });
+    // ── FOOTER ──────────────────────────────────────────────────
+    rvList(
+      document.querySelectorAll('.footer-grid > div'),
+      'fade-up',
+      i => i * 80
+    );
+    rv(document.querySelector('.footer-bottom'), 'fade-up', 200);
   };
 
   autoReveal();
 
-  // Hero elements animate immediately on page load (not on scroll)
+  // ── HERO / PAGE-BANNER: fire immediately on load (no scroll needed) ──
   const heroRevealOnLoad = () => {
-    const heroEls = document.querySelectorAll(
-      '.hero-copy-top [data-reveal], .hero-copy-bottom [data-reveal], .hero-visual[data-reveal], .service-header [data-reveal]'
-    );
-    heroEls.forEach(el => {
-      // Small tick so CSS transition fires properly
+    const immediateEls = document.querySelectorAll([
+      '.hero-copy-top [data-reveal]',
+      '.hero-copy-bottom [data-reveal]',
+      '.hero-visual[data-reveal]',
+      '.service-header [data-reveal]'
+    ].join(', '));
+
+    immediateEls.forEach(el => {
+      // Double rAF so CSS transition has a frame to recognise the initial hidden state
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           el.classList.add('revealed');
@@ -225,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   heroRevealOnLoad();
 
-  // IntersectionObserver to trigger reveals
+  // ── INTERSECTION OBSERVER: reveal on scroll ───────────────────
   if ('IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -235,17 +313,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.08,
+      rootMargin: '0px 0px -32px 0px'
     });
 
     document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
   } else {
-    // Fallback: just show everything immediately
+    // No IO support — show everything
     document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('revealed'));
   }
 
-  // Keep old fade-in-section class working for any legacy usage
+  // Legacy .fade-in-section support
   document.querySelectorAll('.fade-in-section').forEach(section => section.classList.add('is-visible'));
 
   // --- Scroll to Top ---
